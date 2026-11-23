@@ -1,5 +1,6 @@
 <?php
 
+use App\UserRoleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,17 +9,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * One table for everyone - customer, vendor, super admin, view-only admin
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', 255);
+            $table->string('email', 255)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone', 20)->nullable();
+            // $table->enum('role', array_column(UserRoleEnum::cases(), 'value'))
+            $table->string('role', 30)
+                ->default(UserRoleEnum::CUSTOMER->value)
+                ->comment('customer, vendor, admin, view_only_admin');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes(); // adds nullable deleted_at column
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
