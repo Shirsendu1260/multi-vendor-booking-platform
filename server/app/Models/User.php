@@ -41,8 +41,8 @@ class User extends Authenticatable
         return $this->hasOne(VendorProfile::class, 'fk_vendor_id');
     }
 
-    public function approvedBy() {
-        return $this->hasOne(VendorProfile::class, 'approved_by');
+    public function approvedVendorProfiles() {
+        return $this->hasMany(VendorProfile::class, 'approved_by');
     }
 
     public function bookings() {
