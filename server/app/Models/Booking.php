@@ -5,10 +5,13 @@ namespace App\Models;
 use App\BookingStatusEnum;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['fk_slot_id', 'fk_customer_id', 'amount'])]
 class Booking extends Model
 {
+    use SoftDeletes;
+
     /**
      * Get the attributes that should be cast.
      *

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\PaymentStatusEnum;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'fk_booking_id',
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Payment extends Model
 {
+    use SoftDeletes;
+
     /**
      * Get the attributes that should be cast.
      *

@@ -5,10 +5,13 @@ namespace App\Models;
 use App\SlotStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['fk_service_id', 'start_time', 'end_time'])]
 class Slot extends Model
 {
+    use SoftDeletes;
+
     /**
      * Get the attributes that should be cast.
      *

@@ -71,4 +71,8 @@ class User extends Authenticatable implements JWTSubject // JWT-aware
     public function reviews() {
         return $this->hasMany(Review::class, 'fk_customer_id');
     }
+
+    public function refreshTokens() {
+        return $this->hasMany(RefreshToken::class, 'fk_user_id');
+    }
 }

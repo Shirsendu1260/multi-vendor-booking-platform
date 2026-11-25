@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['fk_vendor_id', 'business_name'])]
 class VendorProfile extends Model
 {
+    use SoftDeletes;
+
     /**
      * Get the attributes that should be cast.
      *

@@ -5,10 +5,13 @@ namespace App\Models;
 use App\ListingCategoryEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['fk_vendor_profile_id', 'title', 'description', 'category', 'location', 'price_per_slot'])]
 class Service extends Model
 {
+    use SoftDeletes;
+
     /**
      * Get the attributes that should be cast.
      *
