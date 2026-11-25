@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fk_user_id')->constrained('users')->cascadeOnDelete();
             $table->string('token_hash', 500)->unique();
+            $table->string('ip_address', 45)->nullable();
+            $table->string('user_agent', 500)->nullable();
             $table->timestamp('expires_at');
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();

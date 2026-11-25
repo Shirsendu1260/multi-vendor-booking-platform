@@ -12,6 +12,7 @@ erDiagram
     USERS ||--o{ REVIEWS : "writes"
     SERVICES ||--o{ REVIEWS : "receives"
     USERS ||--o{ VENDOR_PROFILES : "approved by (admin)"
+    USERS ||--o{ REFRESH_TOKENS : "has"
 
     USERS {
         bigint id PK
@@ -81,6 +82,14 @@ erDiagram
         tinyint rating
         text comment
     }
+
+    REFRESH_TOKENS {
+        bigint id PK
+        bigint fk_user_id FK
+        string token_hash UK
+        timestamp expires_at
+        timestamp revoked_at
+    }
 ```
 
 ## How to read this
@@ -99,7 +108,12 @@ erDiagram
 - **bookings → payments**: one-to-one. Each booking has exactly one payment record.
 - **bookings → reviews**: one-to-one. You can only review a booking you actually made, once.
 - **users → vendor_profiles (approved_by)**: a second relationship from `users`, representing which admin approved a given vendor.
+- **users → refresh_tokens**: one-to-many. Each login issues a new refresh token row; a user can have several active sessions (e.g. logged in on phone and laptop at once).
 
 ## Why this is normalized
 
 No table stores data that belongs to another table. `bookings.amount` is the one intentional exception, it's a price snapshot at time of booking, not a normalization mistake, since the live price lives in `services.price_per_slot` and can change independently.
+
+## Note on auth/session storage
+
+This project uses JWT for authentication, not Laravel's default session-based auth. The `refresh_tokens` table tracks active logins (used for refresh-token rotation and logout/revocation).
