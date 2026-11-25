@@ -3,19 +3,22 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\UserRoleEnum;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'phone'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+    use SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -27,6 +30,26 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRoleEnum::class,
         ];
+    }
+
+
+    // Relationships //
+
+    public function vendorProfile() {
+        return $this->hasOne(VendorProfile::class, 'fk_vendor_id');
+    }
+
+    public function approvedBy() {
+        return $this->hasOne(VendorProfile::class, 'approved_by');
+    }
+
+    public function bookings() {
+        return $this->hasMany(Booking::class, 'fk_customer_id');
+    }
+
+    public function reviews() {
+        return $this->hasMany(Review::class, 'fk_customer_id');
     }
 }
