@@ -42,6 +42,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Why this matters: every time our code checks "is this user logged in" (things like 
+        // auth()->user() or middleware like auth:api), Laravel needs to know which method to use to 
+        // check that. This tells it: use JWT, not sessions, by default.
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',

@@ -15,7 +15,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 #[Fillable(['name', 'email', 'password', 'phone'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject // JWT-aware
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -38,11 +38,16 @@ class User extends Authenticatable implements JWTSubject
 
     // JWT methods //
 
+    // This tells JWT "what's the unique ID that represents this user inside the token." $this->getKey() 
+    // is Laravel's built-in way of saying "give me this model's primary key," which for us is just the 
+    // id column. So the token will carry user's ID inside it.
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
+    // "claims" are extra pieces of information we can optionally stuff into the token besides the ID. 
+    // Right now we return an empty array, meaning no extra data.
     public function getJWTCustomClaims()
     {
         return [];
