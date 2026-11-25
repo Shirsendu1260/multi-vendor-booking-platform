@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('approved_by')
                 ->nullable()
                 ->constrained('users')
-                ->cascadeOnDelete()
+                ->nullOnDelete()
                 ->comment('Which admin approved the vendor');
             $table->timestamp('approved_at')->nullable();
             $table->timestamps();
