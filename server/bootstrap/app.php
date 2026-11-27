@@ -54,6 +54,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Catch all other exceptions
         $exceptions->render(function (Throwable $e) {
             $message = app()->environment('local') ? $e->getMessage() : __('general.something_went_wrong');
-            return ApiResponse::error(null, $message, 500);
+            $code = $e->getCode() ?? 500;
+            return ApiResponse::error(null, $message, $code);
         });
     })->create();

@@ -61,6 +61,8 @@ class User extends Authenticatable implements JWTSubject // JWT-aware
     }
 
     public function approvedVendorProfiles() {
+        // This admin user has approved many vendor profiles, so we use hasMany. 
+        // The foreign key in the vendor_profiles table that points to this admin user is approved_by.
         return $this->hasMany(VendorProfile::class, 'approved_by');
     }
 
@@ -74,5 +76,12 @@ class User extends Authenticatable implements JWTSubject // JWT-aware
 
     public function refreshTokens() {
         return $this->hasMany(RefreshToken::class, 'fk_user_id');
+    }
+
+
+    // Model functions //
+
+    public static function existsByEmail(string $email): bool {
+        return self::where('email', $email)->exists();
     }
 }

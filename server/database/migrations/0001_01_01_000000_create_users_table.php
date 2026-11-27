@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email', 255)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('phone', 20)->nullable();
+            $table->string('phone', 10)->nullable()->comment('USA phone country code: +1');
             // $table->enum('role', array_column(UserRoleEnum::cases(), 'value'))
             $table->string('role', 30)
                 ->default(UserRoleEnum::CUSTOMER->value)
