@@ -25,4 +25,10 @@ return [
     'refresh_token_revoke_failed' => 'Failed to revoke the provided refresh token. It may have already been revoked or expired.',
     'access_token_revoke_failed' => 'Failed to revoke the provided access token. It may have already been revoked or expired.',
     'session_revoke_failed' => 'Failed to revoke this active session. please try again later.',
+    'session_revoke_success' => 'This active session has been revoked successfully.',
+    'register_success' => 'You have registered successfully.',
+    'login_success' => 'You have logged in successfully.',
+    'logout_success' => 'You have logged out successfully.',
+    'tokens_refreshed' => 'Tokens have been refreshed successfully.',
+    'active_sessions_fetched' => 'All your active sessions have been retrieved successfully.',
 ];

@@ -42,11 +42,37 @@ class TokenHelper {
         ];
     }
 
-    public static function validateRefreshToken(int|string $userId, string $plainRefreshToken): bool {
+    public static function validateRefreshToken(int $userId, string $plainRefreshToken): bool {
         // Get the refresh token record from the database for this user and the provided plain refresh token
         $refreshTokenRecord = RefreshToken::findRefreshTokenRecordByUserAndToken($userId, $plainRefreshToken);
 
         // If no record is found, return false, else true
         return $refreshTokenRecord !== null;
+    }
+    
+    public static function refreshTokenCookie(string $refreshToken) {
+        $isLocal = app()->environment('local');
+
+        return cookie(
+            'refresh_token', // Cookie name
+            $refreshToken, // Value (raw refresh token)
+            config('jwt.refresh_ttl'), // Lifetime in minutes
+            '/', // Path '/' means the cookie is valid for all routes
+            null, // null = current host domain only (not shared with subdomains)
+
+            // secure: true = cookie is only sent over HTTPS (required for SameSite=None)
+            $isLocal ? false : true,
+
+            // httpOnly: true = JavaScript cannot access the cookie, helping prevent XSS-based token theft
+            true,
+
+            false, // raw: false = Laravel URL-encodes the cookie value automatically
+
+            // sameSite: none = allows the cookie to be sent in cross-site requests (required in production)
+            // sameSite: lax = suitable for local development when frontend and backend use the same site
+            // 'lax' = sends cookies with same-site requests and cross-site top-level navigations (e.g., 
+            // clicking a link), but not cross-site fetch/AJAX requests
+            $isLocal ? 'lax' : 'none'
+        );
     }
 }

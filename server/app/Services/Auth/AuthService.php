@@ -172,8 +172,8 @@ class AuthService {
         return RefreshToken::getActiveSessions($user->id);
     }
 
-    public function revokeSession(User $user, int|string $refreshTokenId): void {
-        $isRefreshTokenRevoked = RefreshToken::revokeActiveSession($user->id, $refreshTokenId);
+    public function revokeSession(User $user, string $refreshTokenUUID): void {
+        $isRefreshTokenRevoked = RefreshToken::revokeActiveSession($user->id, $refreshTokenUUID);
 
         if(!$isRefreshTokenRevoked) {
             throw new ModelNotFoundException(__('auth.session_revoke_failed'));

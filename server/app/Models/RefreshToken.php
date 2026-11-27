@@ -32,7 +32,7 @@ class RefreshToken extends Model
 
     // Model functions //
 
-    public static function findRefreshTokenRecordByUserAndToken(int|string $userId, string $plainRefreshToken) {
+    public static function findRefreshTokenRecordByUserAndToken(int $userId, string $plainRefreshToken) {
         // Get the refresh token record/records from the database for this user
         $activeRefreshTokenRecords = self::where('fk_user_id', $userId)
             ->where('expires_at', '>', now()) // Check if the refresh token is not expired
@@ -54,7 +54,7 @@ class RefreshToken extends Model
         return null;
     }
 
-    public static function revokeRefreshToken(int|string $userId, string $plainRefreshToken): bool {
+    public static function revokeRefreshToken(int $userId, string $plainRefreshToken): bool {
         // Get the refresh token record from the database for this user and the provided plain refresh token
         $refreshTokenRecord = self::findRefreshTokenRecordByUserAndToken($userId, $plainRefreshToken);
 
@@ -70,7 +70,7 @@ class RefreshToken extends Model
         return true;
     }
 
-    public static function getActiveSessions(int|string $userId): array {
+    public static function getActiveSessions(int $userId): array {
         return self::where('fk_user_id', $userId)
             ->where('expires_at', '>', now())
             ->where('revoked_at', null)
@@ -78,7 +78,7 @@ class RefreshToken extends Model
             ->toArray();
     }
 
-    public static function revokeActiveSession(int|string $userId, int|string $refreshTokenId): bool {
+    public static function revokeActiveSession(int $userId, int $refreshTokenId): bool {
         $activeSessionRecord = self::where('fk_user_id', $userId)
             ->where('id', $refreshTokenId)
             ->where('expires_at', '>', now())
