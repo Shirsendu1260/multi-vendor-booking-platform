@@ -9,6 +9,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,7 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: '',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // applies default 'api' rate limiter (custimized in AppServiceProvider.php) to all API routes
+        $middleware->throttleApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Default given by Laravel, but we want to make sure that if the request is for an API route, 
@@ -46,6 +48,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(null, __('general.unauthenticated'), 401);
         });
 
+        // JWT related errors
+        $exceptions->render(function (JWTException $e) {
+            return ApiResponse::error(null, __('auth.invalid_or_expired_token'), 401);
+        });
+
         // Authorization errors
         $exceptions->render(function (AuthorizationException $e) {
             return ApiResponse::error(null, __('general.unauthorized'), 403);
@@ -54,7 +61,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Catch all other exceptions
         $exceptions->render(function (Throwable $e) {
             $message = app()->environment('local') ? $e->getMessage() : __('general.something_went_wrong');
-            $code = $e->getCode() ?? 500;
+            $tempCode = $e->getCode();
+            $code = ($tempCode != 0) && is_int($tempCode) ? $tempCode : 500;
             return ApiResponse::error(null, $message, $code);
         });
     })->create();

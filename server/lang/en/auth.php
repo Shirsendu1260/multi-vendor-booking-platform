@@ -24,6 +24,7 @@ return [
     'invalid_access_token' => 'The provided access token is invalid.',
     'refresh_token_revoke_failed' => 'Failed to revoke the provided refresh token. It may have already been revoked or expired.',
     'access_token_revoke_failed' => 'Failed to revoke the provided access token. It may have already been revoked or expired.',
+    'invalid_or_expired_token' => 'The provided token is invalid or has expired. Please request a new one.',
     'session_revoke_failed' => 'Failed to revoke this active session. please try again later.',
     'session_revoke_success' => 'This active session has been revoked successfully.',
     'register_success' => 'You have registered successfully.',
